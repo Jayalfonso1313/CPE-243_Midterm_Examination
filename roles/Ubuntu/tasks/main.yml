@@ -1,0 +1,19 @@
+  - name: Install ufw package
+    ansible.builtin.apt:
+      name: ufw
+      state: present
+
+  - name: Set up firewall rules
+    ansible.builtin.shell: |
+      ufw default deny incoming
+      ufw default allow outgoing
+      ufw allow ssh
+      ufw enable
+
+  - block:
+      - name: Verifying the firewall on Ubuntu
+        shell: systemctl status ufw.service
+        register: Set_Firewall
+
+  - debug:
+      msg="{{ Set_Firewall }}"
